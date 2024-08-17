@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
@@ -30,7 +31,8 @@ class Dish(models.Model):
     description = models.TextField()
     price = models.DecimalField(max_digits=8, decimal_places=2)
     dish_type = models.ForeignKey(DishType, on_delete=models.CASCADE)
-    cooks = models.ManyToManyField(Cook, related_name="cooked_dishes")
+    cooks = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name="cooked_dishes")
     ingredients = models.ManyToManyField(
         Ingredient, related_name="used_in_dishes")
 
