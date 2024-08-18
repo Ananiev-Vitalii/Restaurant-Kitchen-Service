@@ -11,6 +11,9 @@ class Cook(AbstractUser):
     def __str__(self):
         return self.username
 
+    class Meta:
+        verbose_name = "Cook"
+
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=100, unique=True)
