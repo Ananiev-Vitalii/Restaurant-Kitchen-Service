@@ -21,7 +21,14 @@ class CookAdmin(UserAdmin):
     search_fields = ["username", "first_name", "last_name"]
     search_help_text = "Search by username, first_name or description"
     fieldsets = UserAdmin.fieldsets + (
-        (("Additional info", {"fields": ("years_of_experience",)}),)
+        (("Additional info", {
+            "fields": (
+                "years_of_experience",
+                "facebook_link",
+                "instagram_link",
+                "twitter_link"
+            )
+        }),)
     )
     add_fieldsets = UserAdmin.add_fieldsets + (
         (
@@ -46,7 +53,7 @@ class DishAdmin(admin.ModelAdmin):
     ]
     search_fields = ["name"]
     search_help_text = "Search by name"
-    list_filter = ["dish_type__name"]
+    list_filter = ["dish_type__name", "is_popular"]
 
     def get_queryset(self, request: HttpRequest) -> QuerySet:
         return super().get_queryset(request).prefetch_related(
