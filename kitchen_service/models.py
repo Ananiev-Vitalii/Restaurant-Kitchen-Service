@@ -7,6 +7,24 @@ from django.utils.crypto import get_random_string
 
 class Cook(AbstractUser):
     years_of_experience = models.IntegerField(default=0)
+    facebook_link = models.URLField(
+        max_length=255,
+        blank=True,
+        null=True,
+        default='https://www.facebook.com/'
+    )
+    instagram_link = models.URLField(
+        max_length=255,
+        blank=True,
+        null=True,
+        default='https://www.instagram.com/'
+    )
+    twitter_link = models.URLField(
+        max_length=255,
+        blank=True,
+        null=True,
+        default='https://www.twitter.com/'
+    )
 
     def __str__(self):
         return self.username
@@ -38,6 +56,7 @@ class Dish(models.Model):
         settings.AUTH_USER_MODEL, related_name="cooked_dishes")
     ingredients = models.ManyToManyField(
         Ingredient, related_name="used_in_dishes")
+    is_popular = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -45,18 +64,18 @@ class Dish(models.Model):
 
 class Order(models.Model):
     STATUS_CHOICES = [
-        ('P', 'Pending'),
-        ('C', 'Completed'),
-        ('R', 'Rejected'),
+        ("P", "Pending"),
+        ("C", "Completed"),
+        ("R", "Rejected"),
     ]
 
     order_number = models.CharField(max_length=10, unique=True, editable=False)
     customer_name = models.CharField(max_length=50)
     order_date = models.DateTimeField(default=timezone.now)
-    dishes = models.ManyToManyField('Dish', related_name='orders')
+    dishes = models.ManyToManyField(Dish, related_name="orders")
     total_price = models.DecimalField(max_digits=8, decimal_places=2)
     status = models.CharField(
-        max_length=1, choices=STATUS_CHOICES, default='P')
+        max_length=1, choices=STATUS_CHOICES, default="P")
 
     def save(self, *args, **kwargs) -> None:
         if not self.order_number:
