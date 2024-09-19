@@ -7,7 +7,7 @@ from django.utils.crypto import get_random_string
 
 class Cook(AbstractUser):
     years_of_experience = models.IntegerField(default=0)
-    photo = models.ImageField(upload_to="cooks/", blank=True, null=True)
+    photo = models.ImageField(upload_to="cooks/", default="cooks/default.jpg")
     facebook_link = models.URLField(
         max_length=255,
         blank=True,
@@ -65,7 +65,7 @@ class Dish(models.Model):
         Ingredient, related_name="used_in_dishes")
     is_popular = models.BooleanField(default=False)
     meal_time = models.CharField(max_length=2, choices=MEAL_TIMES, default="LN")
-    image = models.ImageField(upload_to="dishes/", blank=True, null=True)
+    image = models.ImageField(upload_to="dishes/", default="dishes/default.jpg")
 
     def __str__(self):
         return self.name
