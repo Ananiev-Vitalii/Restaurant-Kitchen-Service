@@ -23,6 +23,7 @@ class CookAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
         (("Additional info", {
             "fields": (
+                "photo",
                 "years_of_experience",
                 "facebook_link",
                 "instagram_link",
