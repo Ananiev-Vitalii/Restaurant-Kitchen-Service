@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load cook_tags %}
+{% load dish_tags %}
 {% block title %}
 Kitchen Service
 {% endblock title %}
@@ -148,58 +149,67 @@ Kitchen Service
       <div class="tab-content">
         <div id="tab-1" class="tab-pane fade show p-0 active">
           <div class="row g-4">
+            {% popular_breakfasts as breakfasts %}
+            {% for dish in breakfasts %}
             <div class="col-lg-6">
               <div class="d-flex align-items-center">
-                <img class="flex-shrink-0 img-fluid rounded" src="{% static 'img/menu-1.jpg' %}"
-                     alt=""
-                     style="width: 80px;">
+                <img class="flex-shrink-0 img-fluid rounded" src="{{ dish.image.url }}"
+                     alt="{{ dish.name }}" style="width: 80px;">
                 <div class="w-100 d-flex flex-column text-start ps-4">
                   <h5 class="d-flex justify-content-between border-bottom pb-2">
-                    <span>Chicken Burger</span>
-                    <span class="text-primary">$0</span>
+                    <span>{{ dish.name }}</span>
+                    <span class="text-primary">${{ dish.price }}</span>
                   </h5>
-                  <small class="fst-italic">...</small>
+                  <small class="fst-italic">{{ dish.description }}</small>
                 </div>
               </div>
             </div>
           </div>
+          {% endfor %}
         </div>
+
         <div id="tab-2" class="tab-pane fade show p-0">
           <div class="row g-4">
+            {% popular_lunches as lunches %}
+            {% for dish in lunches %}
             <div class="col-lg-6">
               <div class="d-flex align-items-center">
-                <img class="flex-shrink-0 img-fluid rounded" src="" alt=""
-                     style="width: 80px;">
+                <img class="flex-shrink-0 img-fluid rounded" src="{{ dish.image.url }}"
+                     alt="{{ dish.name }}" style="width: 80px;">
                 <div class="w-100 d-flex flex-column text-start ps-4">
                   <h5 class="d-flex justify-content-between border-bottom pb-2">
-                    <span>Chicken Burger</span>
-                    <span class="text-primary">$0</span>
+                    <span>{{ dish.name }}</span>
+                    <span class="text-primary">${{ dish.price }}</span>
                   </h5>
-                  <small class="fst-italic">...</small>
+                  <small class="fst-italic">{{ dish.description }}</small>
                 </div>
               </div>
             </div>
+            {% endfor %}
           </div>
         </div>
 
         <div id="tab-3" class="tab-pane fade show p-0">
           <div class="row g-4">
+            {% popular_dinners as dinners %}
+            {% for dish in dinners %}
             <div class="col-lg-6">
               <div class="d-flex align-items-center">
-                <img class="flex-shrink-0 img-fluid rounded" src="" alt=""
-                     style="width: 80px;">
+                <img class="flex-shrink-0 img-fluid rounded" src="{{ dish.image.url }}"
+                     alt="{{ dish.name }}" style="width: 80px;">
                 <div class="w-100 d-flex flex-column text-start ps-4">
                   <h5 class="d-flex justify-content-between border-bottom pb-2">
-                    <span>Chicken Burger</span>
-                    <span class="text-primary">$0</span>
+                    <span>{{ dish.name }}</span>
+                    <span class="text-primary">${{ dish.price }}</span>
                   </h5>
-                  <small class="fst-italic">...</small>
+                  <small class="fst-italic">{{ dish.description }}</small>
                 </div>
               </div>
             </div>
-
+            {% endfor %}
           </div>
         </div>
+
       </div>
     </div>
   </div>
