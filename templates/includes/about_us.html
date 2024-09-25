@@ -1,0 +1,90 @@
+{% load static %}
+{% load cook_tags %}
+<div class="container-xxl py-5">
+  <div class="container">
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-6">
+        <div class="row g-3">
+          <div class="col-6 text-start">
+            <img class="img-fluid rounded w-100 wow zoomIn" data-wow-delay="0.1s"
+                 src="{% static 'img/about-1.jpg' %}">
+          </div>
+          <div class="col-6 text-start">
+            <img class="img-fluid rounded w-75 wow zoomIn" data-wow-delay="0.3s"
+                 src="{% static 'img/about-2.jpg' %}"
+                 style="margin-top: 25%;">
+          </div>
+          <div class="col-6 text-end">
+            <img class="img-fluid rounded w-75 wow zoomIn" data-wow-delay="0.5s"
+                 src="{% static 'img/about-3.jpg' %}">
+          </div>
+          <div class="col-6 text-end">
+            <img class="img-fluid rounded w-100 wow zoomIn" data-wow-delay="0.7s"
+                 src="{% static 'img/about-4.jpg' %}">
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <h5 class="section-title ff-secondary text-start text-primary fw-normal">About Us</h5>
+        <h1 class="mb-4">Welcome to <br><i class="fa fa-utensils text-primary me-2"></i> Kitchen
+          Service</h1>
+        <p class="mb-4">At Kitchen Service, we pride ourselves on delivering an unforgettable dining experience.
+          Our menu is crafted from the freshest ingredients and combines both traditional and modern culinary
+          styles. Whether you're looking for a casual meal or a special dining event, we have something for
+          everyone.</p>
+        <p class="mb-4">Our dedicated team of chefs, with over 15 years of combined experience, works
+          passionately to create dishes that not only taste amazing but also leave a lasting impression. From
+          appetizers to desserts, every dish is prepared with love and precision, ensuring you enjoy every
+          bite.</p>
+        <div class="row g-4 mb-4">
+          <div class="col-sm-6">
+            <div class="d-flex align-items-center border-start border-5 border-primary px-3">
+              <h1 class="flex-shrink-0 display-5 text-primary mb-0" data-toggle="counter-up">
+                {{ dish_list.count }}
+              </h1>
+              <div class="ps-4">
+                <p class="mb-0">Number of</p>
+                <h6 class="text-uppercase mb-0">Dishes</h6>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="d-flex align-items-center border-start border-5 border-primary px-3">
+              <h1 class="flex-shrink-0 display-5 text-primary mb-0" data-toggle="counter-up">
+                {% total_cooks_count %}
+              </h1>
+              <div class="ps-4">
+                <p class="mb-0">Popular</p>
+                <h6 class="text-uppercase mb-0">Master Chefs</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% if request.resolver_match.url_name == 'home'%}
+        <a class="btn btn-primary py-3 px-5 mt-2" href="{% url 'kitchen_service:about' %}">Read More</a>
+        {% endif %}
+      </div>
+    </div>
+    {% if request.resolver_match.url_name == 'about'%}
+    <div class="row g-5 align-items-top pt-5">
+      <div class="col-lg-6">
+        <div class="video-introduction">
+          <video id="video-introduction" style="object-fit: cover;" width="100%" height="100%" autoplay muted loop>
+            <source src="{% static 'videos/presentation.mp4' %}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="text-content">
+          <h2 class="mb-4">Behind the Scenes at Our Restaurant</h2>
+          <p class="mb-4">ЗDive into the ambiance of our restaurant with this exclusive video presentation. From
+            meticulous ingredient selection to the artistry of meal preparation, our staff do everything to ensure that
+            every guest experiences true culinary delight. Learn more about our unique approach to hospitality and how
+            we turn every visit into an unforgettable experience.</p>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
