@@ -1,23 +1,20 @@
 {% extends "base.html" %}
 {% load static %}
-{% load cook_tags %}
 {% load dish_tags %}
+
 {% block title %}
 Kitchen Service
 {% endblock title %}
+
 {% block content %}
+
 <!-- Spinner Start -->
-<div id="spinner"
-     class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-  <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-    <span class="sr-only">Loading...</span>
-  </div>
-</div>
+{% include 'includes/spinner.html' %}
 <!-- Spinner End -->
 
 <!-- Navbar & Hero Start -->
 <div class="container-xxl position-relative p-0">
-  {% include 'includes/navbar_index.html' %}
+  {% include 'includes/navbar.html' %}
   <div class="container-xxl py-5 bg-dark hero-header mb-5">
     <div class="container my-5 py-5">
       <div class="row align-items-center g-5">
@@ -39,71 +36,7 @@ Kitchen Service
 <!-- Navbar & Hero End -->
 
 <!-- About Start -->
-<div class="container-xxl py-5">
-  <div class="container">
-    <div class="row g-5 align-items-center">
-      <div class="col-lg-6">
-        <div class="row g-3">
-          <div class="col-6 text-start">
-            <img class="img-fluid rounded w-100 wow zoomIn" data-wow-delay="0.1s"
-                 src="{% static 'img/about-1.jpg' %}">
-          </div>
-          <div class="col-6 text-start">
-            <img class="img-fluid rounded w-75 wow zoomIn" data-wow-delay="0.3s"
-                 src="{% static 'img/about-2.jpg' %}"
-                 style="margin-top: 25%;">
-          </div>
-          <div class="col-6 text-end">
-            <img class="img-fluid rounded w-75 wow zoomIn" data-wow-delay="0.5s"
-                 src="{% static 'img/about-3.jpg' %}">
-          </div>
-          <div class="col-6 text-end">
-            <img class="img-fluid rounded w-100 wow zoomIn" data-wow-delay="0.7s"
-                 src="{% static 'img/about-4.jpg' %}">
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-6">
-        <h5 class="section-title ff-secondary text-start text-primary fw-normal">About Us</h5>
-        <h1 class="mb-4">Welcome to <br><i class="fa fa-utensils text-primary me-2"></i> Kitchen
-          Service</h1>
-        <p class="mb-4">At Kitchen Service, we pride ourselves on delivering an unforgettable dining experience.
-          Our menu is crafted from the freshest ingredients and combines both traditional and modern culinary
-          styles. Whether you're looking for a casual meal or a special dining event, we have something for
-          everyone.</p>
-        <p class="mb-4">Our dedicated team of chefs, with over 15 years of combined experience, works
-          passionately to create dishes that not only taste amazing but also leave a lasting impression. From
-          appetizers to desserts, every dish is prepared with love and precision, ensuring you enjoy every
-          bite.</p>
-        <div class="row g-4 mb-4">
-          <div class="col-sm-6">
-            <div class="d-flex align-items-center border-start border-5 border-primary px-3">
-              <h1 class="flex-shrink-0 display-5 text-primary mb-0" data-toggle="counter-up">
-                {{ dish_list.count }}
-              </h1>
-              <div class="ps-4">
-                <p class="mb-0">Number of</p>
-                <h6 class="text-uppercase mb-0">Dishes</h6>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="d-flex align-items-center border-start border-5 border-primary px-3">
-              <h1 class="flex-shrink-0 display-5 text-primary mb-0" data-toggle="counter-up">
-                {% total_cooks_count %}
-              </h1>
-              <div class="ps-4">
-                <p class="mb-0">Popular</p>
-                <h6 class="text-uppercase mb-0">Master Chefs</h6>
-              </div>
-            </div>
-          </div>
-        </div>
-        <a class="btn btn-primary py-3 px-5 mt-2" href="">Read More</a>
-      </div>
-    </div>
-  </div>
-</div>
+{% include 'includes/about_us.html' %}
 <!-- About End -->
 
 <!-- Menu Start -->
@@ -217,39 +150,7 @@ Kitchen Service
 <!-- Menu End -->
 
 <!-- Team Start  -->
-<div class="container-xxl pt-5 pb-3">
-  <div class="container">
-    <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-      <h5 class="section-title ff-secondary text-center text-primary fw-normal">Team Members</h5>
-      <h1 class="mb-5">Our Cooks</h1>
-    </div>
-    <div class="row g-4">
-      {% all_cooks as cooks %}
-      {% for cook in cooks %}
-      <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-        <div class="team-item text-center rounded overflow-hidden">
-          <div class="rounded-circle overflow-hidden m-4">
-            <img class="img-fluid" src="{{ cook.photo.url }}" alt="">
-          </div>
-          <h5 class="mb-0">{{ cook.last_name }} {{ cook.first_name }}</h5>
-          <div class="d-flex justify-content-center mt-3">
-            <a class="btn btn-square btn-primary mx-1" href="{{ cook.facebook_link }}" target="_blank">
-              <i class="fab fa-facebook-f"></i>
-            </a>
-            <a class="btn btn-square btn-primary mx-1" href="{{ cook.instagram_link }}" target="_blank">
-              <i class="fab fa-twitter"></i>
-            </a>
-            <a class="btn btn-square btn-primary mx-1" href="{{ cook.twitter_link }}" target="_blank">
-              <i class="fab fa-instagram"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-    <a class="btn btn-primary py-3 px-5 mt-3" href="">Read More</a>
-  </div>
-</div>
+{% include 'includes/team.html' %}
 <!-- Team End -->
 
 <!-- Footer Start -->
@@ -257,23 +158,28 @@ Kitchen Service
 <!-- Footer End -->
 
 <!-- Back to Top -->
-<a href="" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+{% include 'includes/back_to_top.html' %}
 <!-- Back to Top End-->
+
 {% endblock content %}
 
 {% block JavaScript %}
-<!-- JavaScript Libraries -->
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="{% static 'lib/wow/wow.min.js' %}"></script>
-<script src="{% static 'lib/easing/easing.min.js' %}"></script>
-<script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
-<script src="{% static 'lib/counterup/counterup.min.js' %}"></script>
-<script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
-<script src="{% static 'lib/tempusdominus/js/moment.min.js' %}"></script>
-<script src="{% static 'lib/tempusdominus/js/moment-timezone.min.js' %}"></script>
-<script src="{% static 'lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js' %}"></script>
-
-<!-- Template Javascript -->
-<script src="{% static 'js/main.js' %}"></script>
+<!-- This script loads all cooks when the 'View More' button is clicked -->
+<script>
+  document.getElementById('load-more').addEventListener('click', function() {
+    var xhr = new XMLHttpRequest();
+    var url = window.location.pathname + '?show_all_cooks=1';
+    xhr.open('GET', url, true);
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(xhr.responseText, 'text/html');
+        var newCooksContainer = doc.getElementById('cooks-container');
+        document.getElementById('cooks-container').innerHTML = newCooksContainer.innerHTML;
+        document.getElementById('load-more').style.display = 'none';
+      }
+    };
+    xhr.send();
+  });
+</script>
 {% endblock JavaScript %}
