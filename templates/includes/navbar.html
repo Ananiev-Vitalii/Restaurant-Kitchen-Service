@@ -1,0 +1,20 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 px-lg-5 py-3 py-lg-0">
+  <a href="{% url 'kitchen_service:home' %}" class="navbar-brand p-0">
+    <h1 class="text-primary m-0"><i class="fa fa-utensils me-3"></i>Kitchen Service</h1>
+  </a>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+    <span class="fa fa-bars"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+    <div class="navbar-nav ms-auto py-0 pe-4">
+      <a href="{% url 'kitchen_service:home' %}"
+         class="nav-item nav-link {% if request.resolver_match.url_name == 'home' %} active {% endif %}">Home</a>
+      <a href="{% url 'kitchen_service:about' %}"
+         class="nav-item nav-link {% if request.resolver_match.url_name == 'about' %} active {% endif %}">About</a>
+      <a href=""
+         class="nav-item nav-link {% if request.resolver_match.url_name == 'menu' %} active {% endif %}">Menu</a>
+      <a href="#" class="nav-item nav-link">Login</a>
+    </div>
+  </div>
+</nav>
+
