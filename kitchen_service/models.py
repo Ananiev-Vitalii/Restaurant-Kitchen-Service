@@ -1,12 +1,16 @@
 from django.conf import settings
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 from django.utils.crypto import get_random_string
+from decimal import Decimal
 
 
 class Cook(AbstractUser):
-    years_of_experience = models.IntegerField(default=0)
+    years_of_experience = models.IntegerField(
+        default=0,
+        validators=[MinValueValidator(0)])
     photo = models.ImageField(upload_to="cooks/", default="cooks/default.jpg")
     facebook_link = models.URLField(
         max_length=255,
@@ -57,7 +61,8 @@ class Dish(models.Model):
 
     name = models.CharField(max_length=100)
     description = models.TextField()
-    price = models.DecimalField(max_digits=8, decimal_places=2)
+    price = models.DecimalField(max_digits=8, decimal_places=2,
+                                validators=[MinValueValidator(0.01)])
     dish_type = models.ForeignKey(DishType, on_delete=models.CASCADE)
     cooks = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name="cooked_dishes")
@@ -81,12 +86,16 @@ class Order(models.Model):
     order_number = models.CharField(max_length=10, unique=True, editable=False)
     customer_name = models.CharField(max_length=50)
     order_date = models.DateTimeField(default=timezone.now)
-    dishes = models.ManyToManyField(Dish, related_name="orders")
-    total_price = models.DecimalField(max_digits=8, decimal_places=2)
+    dishes = models.ForeignKey(Dish, on_delete=models.CASCADE, related_name="orders")
+    quantity = models.IntegerField(default=1, validators=[MinValueValidator(1)])
+    total_price = models.DecimalField(max_digits=8, decimal_places=2, editable=False)
     status = models.CharField(
         max_length=1, choices=STATUS_CHOICES, default="P")
+    cook = models.ForeignKey(Cook, on_delete=models.SET_NULL, null=True)
 
-    def save(self, *args, **kwargs) -> None:
+    def save(self, *args, **kwargs):
+        if self.dishes and self.quantity:
+            self.total_price = Decimal(self.quantity) * self.dishes.price
         if not self.order_number:
             self.order_number = get_random_string(10).upper()
         super().save(*args, **kwargs)
