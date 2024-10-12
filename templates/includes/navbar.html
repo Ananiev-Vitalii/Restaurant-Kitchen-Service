@@ -11,7 +11,7 @@
          class="nav-item nav-link {% if request.resolver_match.url_name == 'home' %} active {% endif %}">Home</a>
       <a href="{% url 'kitchen_service:about' %}"
          class="nav-item nav-link {% if request.resolver_match.url_name == 'about' %} active {% endif %}">About</a>
-      <a href=""
+      <a href="{% url 'kitchen_service:menu' %}"
          class="nav-item nav-link {% if request.resolver_match.url_name == 'menu' %} active {% endif %}">Menu</a>
       <a href="#" class="nav-item nav-link">Login</a>
     </div>
