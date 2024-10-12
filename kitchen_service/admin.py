@@ -77,7 +77,7 @@ class DishAdmin(admin.ModelAdmin):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = [
-        "order_number", "customer_name", "total_price", "status", "get_dishes"
+        "order_number", "customer_name", "total_price", "status", "dishes"
     ]
     search_fields = ["order_number", "customer_name"]
     search_help_text = "Search by order_number  or customer_name"
@@ -85,8 +85,3 @@ class OrderAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request: HttpRequest) -> QuerySet:
         return super().get_queryset(request).prefetch_related("dishes")
-
-    def get_dishes(self, obj: Order) -> str:
-        return ", ".join([dish.name for dish in obj.dishes.all()])
-
-    get_dishes.short_description = "Dishes"
