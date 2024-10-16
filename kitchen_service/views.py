@@ -1,6 +1,8 @@
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
 from django.views import generic
-
-from kitchen_service.models import Dish, DishType, Order
+from kitchen_service.forms import OrderForm
+from kitchen_service.models import Dish, DishType
 
 
 class DishListView(generic.ListView):
@@ -25,10 +27,18 @@ class MenuListView(generic.ListView):
     context_object_name = "dish_type_list"
     queryset = DishType.objects.all()
 
-# class Order(generic.DetailView):
-#     model = Order
-#     template_name = "kitchen_service/order.html"
-#     context_object_name = "order_detail"
-#     queryset = Order.objects.select_related(
-#         "dishes", "cook"
-#     ).prefetch_related("dishes__cooks", "dishes__ingredients")
+
+class OrderCreateView(generic.CreateView):
+    form_class = OrderForm
+    template_name = "kitchen_service/order_form.html"
+    success_url = reverse_lazy("kitchen_service:home")
+
+    def form_valid(self, form):
+        dish = get_object_or_404(Dish, pk=self.kwargs.get("pk"))
+        form.instance.dishes = dish
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["dish"] = get_object_or_404(Dish, pk=self.kwargs.get("pk"))
+        return context
