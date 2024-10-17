@@ -1,9 +1,10 @@
 from django.conf import settings
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 from django.utils.crypto import get_random_string
+from django.urls import reverse
 from decimal import Decimal
 
 
@@ -32,7 +33,7 @@ class Cook(AbstractUser):
     )
 
     def __str__(self):
-        return self.username
+        return f"{self.first_name} {self.last_name}"
 
     class Meta:
         verbose_name = "Cook"
@@ -75,6 +76,9 @@ class Dish(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse("kitchen_service:order", args=[str(self.id)])
+
 
 class Order(models.Model):
     STATUS_CHOICES = [
@@ -84,7 +88,15 @@ class Order(models.Model):
     ]
 
     order_number = models.CharField(max_length=10, unique=True, editable=False)
-    customer_name = models.CharField(max_length=50)
+    customer_name = models.CharField(
+        max_length=50,
+        validators=[
+            RegexValidator(
+                regex=r"^[A-Za-zА-Яа-яЁё]+$",
+                message="The name field must contain only letters.",
+            )
+        ]
+    )
     order_date = models.DateTimeField(default=timezone.now)
     dishes = models.ForeignKey(Dish, on_delete=models.CASCADE, related_name="orders")
     quantity = models.IntegerField(default=1, validators=[MinValueValidator(1)])
