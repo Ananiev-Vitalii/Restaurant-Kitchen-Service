@@ -11,7 +11,9 @@ from decimal import Decimal
 class Cook(AbstractUser):
     years_of_experience = models.IntegerField(
         default=0,
-        validators=[MinValueValidator(0)])
+        validators=[MinValueValidator(0)],
+        db_index=True
+    )
     photo = models.ImageField(upload_to="cooks/", default="cooks/default.jpg")
     facebook_link = models.URLField(
         max_length=255,
@@ -69,7 +71,7 @@ class Dish(models.Model):
         settings.AUTH_USER_MODEL, related_name="cooked_dishes")
     ingredients = models.ManyToManyField(
         Ingredient, related_name="used_in_dishes")
-    is_popular = models.BooleanField(default=False)
+    is_popular = models.BooleanField(default=False, db_index=True)
     meal_time = models.CharField(max_length=2, choices=MEAL_TIMES, default="LN")
     image = models.ImageField(upload_to="dishes/", default="dishes/default.jpg")
 
@@ -103,7 +105,15 @@ class Order(models.Model):
     total_price = models.DecimalField(max_digits=8, decimal_places=2, editable=False)
     status = models.CharField(
         max_length=1, choices=STATUS_CHOICES, default="P")
-    cook = models.ForeignKey(Cook, on_delete=models.SET_NULL, null=True)
+    cook = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True
+    )
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['order_date']),
+            models.Index(fields=['status']),
+        ]
 
     def save(self, *args, **kwargs):
         if self.dishes and self.quantity:
