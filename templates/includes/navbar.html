@@ -13,8 +13,9 @@
          class="nav-item nav-link {% if request.resolver_match.url_name == 'about' %} active {% endif %}">About</a>
       <a href="{% url 'kitchen_service:menu' %}"
          class="nav-item nav-link {% if request.resolver_match.url_name == 'menu' %} active {% endif %}">Menu</a>
+      <a href="{% url 'kitchen_service:orders' %}"
+         class="nav-item nav-link {% if request.resolver_match.url_name == 'orders' %} active {% endif %}">Orders</a>
       <a href="#" class="nav-item nav-link">Login</a>
     </div>
   </div>
 </nav>
-
