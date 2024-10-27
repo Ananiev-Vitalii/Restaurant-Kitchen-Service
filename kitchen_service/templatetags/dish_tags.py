@@ -22,5 +22,7 @@ def popular_lunches():
 
 @register.simple_tag
 def popular_dinners():
-    dinners = Dish.objects.filter(is_popular=True, meal_time="DN")
+    dinners = Dish.objects.filter(
+        is_popular=True, meal_time="DN"
+    ).prefetch_related("cooks", "ingredients")
     return dinners

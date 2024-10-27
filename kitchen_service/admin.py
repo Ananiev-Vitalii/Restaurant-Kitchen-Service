@@ -17,33 +17,20 @@ class DishTypeAdmin(admin.ModelAdmin):
 
 @admin.register(Cook)
 class CookAdmin(UserAdmin):
-    list_display = UserAdmin.list_display + ("years_of_experience",)
+    list_display = UserAdmin.list_display + ("years_of_experience", "is_cook")
     search_fields = ["username", "first_name", "last_name"]
-    search_help_text = "Search by username, first_name or description"
+    search_help_text = "Search by username, first_name or last_name"
+
+    additional_info_fields = ("years_of_experience", "is_cook")
+    social_links_fields = ("facebook_link", "instagram_link", "twitter_link")
+    photo_field = ("photo",)
+
+    list_filter = UserAdmin.list_filter + ("is_cook", "years_of_experience")
+
     fieldsets = UserAdmin.fieldsets + (
-        (("Additional info", {
-            "fields": (
-                "photo",
-                "years_of_experience",
-                "facebook_link",
-                "instagram_link",
-                "twitter_link"
-            )
-        }),)
-    )
-    add_fieldsets = UserAdmin.add_fieldsets + (
-        (
-            (
-                "Additional info",
-                {
-                    "fields": (
-                        "first_name",
-                        "last_name",
-                        "years_of_experience",
-                    )
-                },
-            ),
-        )
+        ("Additional info", {
+            "fields": photo_field + additional_info_fields + social_links_fields
+        }),
     )
 
 
@@ -62,7 +49,7 @@ class DishAdmin(admin.ModelAdmin):
         )
 
     def get_cooks(self, obj: Dish) -> str:
-        return ", ".join([cook.username for cook in obj.cooks.all()])
+        return ", ".join([cook.username for cook in obj.cooks.filter(is_cook=True)])
 
     get_cooks.short_description = "Cooks"
 
@@ -77,7 +64,8 @@ class DishAdmin(admin.ModelAdmin):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = [
-        "order_number", "customer_name", "total_price", "status", "dishes"
+        "order_number", "customer_name", "dishes",
+        "quantity", "total_price", "cook", "status"
     ]
     search_fields = ["order_number", "customer_name"]
     search_help_text = "Search by order_number  or customer_name"

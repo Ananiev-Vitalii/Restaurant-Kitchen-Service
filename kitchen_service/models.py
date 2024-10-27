@@ -19,19 +19,23 @@ class Cook(AbstractUser):
         max_length=255,
         blank=True,
         null=True,
-        default='https://www.facebook.com/'
+        default="https://www.facebook.com/"
     )
     instagram_link = models.URLField(
         max_length=255,
         blank=True,
         null=True,
-        default='https://www.instagram.com/'
+        default="https://www.instagram.com/"
     )
     twitter_link = models.URLField(
         max_length=255,
         blank=True,
         null=True,
-        default='https://www.twitter.com/'
+        default="https://www.twitter.com/"
+    )
+    is_cook = models.BooleanField(
+        default=False,
+        help_text="Indicates if the user is a cook"
     )
 
     def __str__(self):
@@ -79,7 +83,7 @@ class Dish(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("kitchen_service:order", args=[str(self.id)])
+        return reverse("kitchen_service:order-create", args=[str(self.id)])
 
 
 class Order(models.Model):
@@ -111,8 +115,8 @@ class Order(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=['order_date']),
-            models.Index(fields=['status']),
+            models.Index(fields=["order_date"]),
+            models.Index(fields=["status"]),
         ]
 
     def save(self, *args, **kwargs):
