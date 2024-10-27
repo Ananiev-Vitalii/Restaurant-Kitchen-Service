@@ -60,12 +60,12 @@
             </div>
           </div>
         </div>
-        {% if request.resolver_match.url_name == 'home'%}
-        <a class="btn btn-primary py-3 px-5 mt-2" href="{% url 'kitchen_service:about' %}">Read More</a>
+        {% if request.resolver_match.url_name == 'index'%}
+        <a class="btn btn-primary py-3 px-5 mt-2" href="{% url 'kitchen_service:about-template' %}">Read More</a>
         {% endif %}
       </div>
     </div>
-    {% if request.resolver_match.url_name == 'about'%}
+    {% if request.resolver_match.url_name == 'about-template'%}
     <div class="row g-5 align-items-top pt-5">
       <div class="col-lg-6">
         <div class="video-introduction">
