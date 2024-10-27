@@ -25,6 +25,32 @@
     z-index: 99;
 }
 
+.button-submit {
+    text-transform: none !important;
+    border-radius: 5px;
+}
+
+.error-message {
+    color: red;
+}
+
+
+/*** Base form ***/
+.base-form {
+    padding-top: 20px;
+}
+.block-form {
+    background: var(--dark) !important;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 40px;
+}
+
+.forgot-password-link {
+    display: block;
+    padding-top:20px;
+}
+
 
 /*** Order form ***/
 .order-form {
@@ -52,7 +78,6 @@
 .order-form .btn,
 .order-form .form-control,
 .order-form .form-select {
-    border-radius: 5px;
     width: 100%;
     margin-bottom: 1rem;
     box-sizing: border-box;
@@ -65,6 +90,7 @@
 
 .order-form .btn {
     text-transform: none;
+    border-radius: 5px;
 }
 
 #dish-info img {
