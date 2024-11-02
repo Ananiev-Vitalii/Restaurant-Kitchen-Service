@@ -10,6 +10,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
+    "django_cleanup.apps.CleanupConfig",
     "crispy_forms",
     "crispy_bootstrap5",
     "kitchen_service",
@@ -31,6 +32,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
 ROOT_URLCONF = "restaurant.urls"
 
 TEMPLATES = [

@@ -1,48 +1,49 @@
+import os
 from django.conf import settings
 from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 from django.utils.crypto import get_random_string
+from django.utils.text import slugify
 from django.urls import reverse
 from decimal import Decimal
 
 
 class Cook(AbstractUser):
+    name_validator = RegexValidator(
+        regex=r"^[A-Za-z]+$",
+        message="Only alphabetic characters are allowed."
+    )
+
+    def user_directory_path(instance: "Cook", filename: str) -> str:
+        username_slug = slugify(instance.username)
+        return os.path.join("cooks", username_slug, filename)
+
+    first_name = models.CharField(max_length=30, validators=[name_validator])
+    last_name = models.CharField(max_length=30, validators=[name_validator])
     years_of_experience = models.IntegerField(
         default=0,
         validators=[MinValueValidator(0)],
         db_index=True
     )
-    photo = models.ImageField(upload_to="cooks/", default="cooks/default.jpg")
-    facebook_link = models.URLField(
-        max_length=255,
-        blank=True,
-        null=True,
-        default="https://www.facebook.com/"
-    )
-    instagram_link = models.URLField(
-        max_length=255,
-        blank=True,
-        null=True,
-        default="https://www.instagram.com/"
-    )
-    twitter_link = models.URLField(
-        max_length=255,
-        blank=True,
-        null=True,
-        default="https://www.twitter.com/"
-    )
-    is_cook = models.BooleanField(
-        default=False,
-        help_text="Indicates if the user is a cook"
-    )
+    photo = models.ImageField(upload_to=user_directory_path, default="cooks/default.jpg")
+    facebook_link = models.URLField(max_length=255, default="https://www.facebook.com/")
+    instagram_link = models.URLField(max_length=255, default="https://www.instagram.com/")
+    twitter_link = models.URLField(max_length=255, default="https://www.twitter.com/")
+    is_cook = models.BooleanField(default=False)
+
+    def clean(self):
+        super().clean()
+        self.first_name = self.first_name.capitalize()
+        self.last_name = self.last_name.capitalize()
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
     class Meta:
-        verbose_name = "Cook"
+        verbose_name = "User"
+        verbose_name_plural = "Cooks and Customers"
 
 
 class Ingredient(models.Model):

@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth import get_user_model
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, ButtonHolder, Submit, HTML
 from django.contrib.auth.forms import (
@@ -7,7 +8,7 @@ from django.contrib.auth.forms import (
     PasswordResetForm,
     UserCreationForm
 )
-from .models import Order, Cook
+from .models import Order
 
 
 class OrderForm(forms.ModelForm):
@@ -24,6 +25,7 @@ class OrderForm(forms.ModelForm):
             self.fields["customer_name"].initial = customer.first_name
             self.fields["customer_name"].disabled = True
 
+        self.fields["cook"].queryset = get_user_model().objects.filter(is_cook=True)
         self.fields["cook"].empty_label = None
         self.helper = FormHelper()
         self.helper.form_method = "post"
@@ -38,6 +40,39 @@ class OrderForm(forms.ModelForm):
                 Submit(name="submit", value="Order a dish")
             )
         )
+
+
+class CookUpdateForm(forms.ModelForm):
+    excluded_fields_for_non_cooks = [
+        "years_of_experience", "photo", "facebook_link",
+        "instagram_link", "twitter_link"
+    ]
+
+    class Meta:
+        model = get_user_model()
+        fields = [
+            "username", "first_name", "last_name", "email",
+            "years_of_experience", "photo", "facebook_link",
+            "instagram_link", "twitter_link"
+        ]
+
+    def __init__(self, *args, is_cook=False, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = "post"
+        self.helper.form_class = "base-form"
+        self.fields["username"].help_text = ""
+        self.fields["photo"].widget.attrs.update({"class": "form-control-file"})
+
+        if not is_cook:
+            for field in self.excluded_fields_for_non_cooks:
+                self.fields.pop(field)
+
+        for field_name, field in self.fields.items():
+            if field_name != "photo":
+                field.widget.attrs.update({"class": "form-control"})
+
+        self.helper.add_input(Submit("submit", "Save Changes", css_class="btn btn-primary w-100 mt-3"))
 
 
 class CookAuthenticationForm(AuthenticationForm):
@@ -136,7 +171,7 @@ class CustomSetPasswordForm(SetPasswordForm):
 
 class CookRegistrationForm(UserCreationForm):
     class Meta:
-        model = Cook
+        model = get_user_model()
         fields = ["username", "email", "first_name", "last_name", "password1", "password2"]
 
     def __init__(self, *args, **kwargs):
@@ -146,7 +181,6 @@ class CookRegistrationForm(UserCreationForm):
         self.helper.form_class = "base-form"
         self.helper.html5_required = True
         self.helper.form_show_labels = False
-        self.helper.form_show_errors = False
         self.fields["username"].help_text = ""
         self.fields["password1"].help_text = ""
         self.fields["password2"].help_text = ""
@@ -157,17 +191,6 @@ class CookRegistrationForm(UserCreationForm):
             )
 
         self.helper.layout = Layout(
-            HTML(
-                """
-                {% if form.errors %}
-                    {% for field, errors in form.errors.items %}
-                        {% for error in errors %}
-                            <p class="error-message">{{ error }}</p>
-                        {% endfor %}
-                    {% endfor %}
-                {% endif %}
-                """
-            ),
             Field("username"),
             Field("email"),
             Field("first_name"),

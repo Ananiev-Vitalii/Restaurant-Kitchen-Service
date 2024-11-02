@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 px-lg-5 py-3 py-lg-0">
-  <a href="{% url 'kitchen_service:home' %}" class="navbar-brand p-0">
+  <a href="{% url 'kitchen_service:index' %}" class="navbar-brand p-0">
     <h1 class="text-primary m-0"><i class="fa fa-utensils me-3"></i>Kitchen Service</h1>
   </a>
   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -7,15 +7,46 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarCollapse">
     <div class="navbar-nav ms-auto py-0 pe-4">
-      <a href="{% url 'kitchen_service:home' %}"
-         class="nav-item nav-link {% if request.resolver_match.url_name == 'home' %} active {% endif %}">Home</a>
-      <a href="{% url 'kitchen_service:about' %}"
-         class="nav-item nav-link {% if request.resolver_match.url_name == 'about' %} active {% endif %}">About</a>
-      <a href="{% url 'kitchen_service:menu' %}"
-         class="nav-item nav-link {% if request.resolver_match.url_name == 'menu' %} active {% endif %}">Menu</a>
-      <a href="{% url 'kitchen_service:orders' %}"
-         class="nav-item nav-link {% if request.resolver_match.url_name == 'orders' %} active {% endif %}">Orders</a>
-      <a href="#" class="nav-item nav-link">Login</a>
+      <a href="{% url 'kitchen_service:index' %}"
+         class="nav-item nav-link {% if request.resolver_match.url_name == 'index' %} active {% endif %}">Home</a>
+      <a href="{% url 'kitchen_service:about-template' %}"
+         class="nav-item nav-link {% if request.resolver_match.url_name == 'about-template' %} active {% endif %}">About</a>
+      <a href="{% url 'kitchen_service:menu-list' %}"
+         class="nav-item nav-link {% if request.resolver_match.url_name == 'menu-list' %} active {% endif %}">Menu</a>
+      <a href="{% url 'kitchen_service:order-list' %}"
+         class="nav-item nav-link {% if request.resolver_match.url_name == 'order-list' %} active {% endif %}">Orders</a>
+
+      {% if user.is_authenticated %}
+      <div class="nav-item dropdown">
+        <a href="#" class="nav-link dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown"
+           aria-expanded="false">
+          Hello, {{ user.first_name }}
+        </a>
+        <ul class="dropdown-menu dropdown-menu-custom" aria-labelledby="userDropdown">
+          {% if user.is_cook %}
+          <li><a class="dropdown-item dropdown-item-custom" href="">Personal Cabinet</a></li>
+          {% endif %}
+          <li><a class="dropdown-item dropdown-item-custom" href="{% url 'kitchen_service:cook-update' %}">Update
+            Profile</a></li>
+          <li>
+            <a class="dropdown-item dropdown-item-custom" href="#" id="logout-link">Log out</a>
+            <form id="logout-form" action="{% url 'kitchen_service:logout' %}" method="post" style="display: none;">
+              {% csrf_token %}
+            </form>
+          </li>
+        </ul>
+      </div>
+      {% else %}
+      <a href="{% url 'kitchen_service:login' %}"
+         class="nav-item nav-link {% if request.resolver_match.url_name == 'login' %} active {% endif %}">Log in</a>
+      {% endif %}
     </div>
   </div>
 </nav>
+
+<script>
+  document.getElementById('logout-link').addEventListener('click', function(event) {
+    event.preventDefault();
+    document.getElementById('logout-form').submit();
+  });
+</script>
