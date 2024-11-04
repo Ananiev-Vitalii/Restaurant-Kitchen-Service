@@ -22,6 +22,7 @@ class Cook(AbstractUser):
 
     first_name = models.CharField(max_length=30, validators=[name_validator])
     last_name = models.CharField(max_length=30, validators=[name_validator])
+    email = models.EmailField(unique=True)
     years_of_experience = models.IntegerField(
         default=0,
         validators=[MinValueValidator(0)],
