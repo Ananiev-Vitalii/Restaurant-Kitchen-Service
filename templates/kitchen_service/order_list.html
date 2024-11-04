@@ -72,13 +72,7 @@ Orders / Kitchen Service
         </td>
         <td>{{ order.order_date|date:"Y-m-d H:i" }}</td>
         <td>
-          {% if order.status == "P" %}
           <span class="badge bg-warning text-dark">Pending</span>
-          {% elif order.status == "C" %}
-          <span class="badge bg-success">Completed</span>
-          {% elif order.status == "R" %}
-          <span class="badge bg-danger">Rejected</span>
-          {% endif %}
         </td>
       </tr>
       {% empty %}

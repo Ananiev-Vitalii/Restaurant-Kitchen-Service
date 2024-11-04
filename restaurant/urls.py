@@ -8,6 +8,8 @@ urlpatterns = [
     path("", include("kitchen_service.urls", namespace="kitchen_service"))
 ]
 
+handler404 = "kitchen_service.views.custom_page_not_found_view"
+
 if settings.DEBUG:
     urlpatterns += static(
         settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

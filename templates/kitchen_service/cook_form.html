@@ -19,7 +19,13 @@ Account/{{ cook.username}}/Kitchen Service
       <h1 class="display-3 text-white mb-3 animated slideInDown">{{ cook.first_name }}'s Profile</h1>
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb justify-content-center text-uppercase">
-          <li class="breadcrumb-item"><a href="">Personal Cabinet</a></li>
+          <li class="breadcrumb-item">
+            {% if cook.is_cook %}
+            <a href="{% url 'kitchen_service:cook-orders-list'%}">Personal Account</a>
+            {% else %}
+            <a href="{% url 'kitchen_service:index'%}">Home</a>
+            {% endif %}
+          </li>
           <li class="breadcrumb-item text-white active" aria-current="page">Update Profile</li>
         </ol>
       </nav>
@@ -44,7 +50,7 @@ Account/{{ cook.username}}/Kitchen Service
         </div>
         {% endif %}
         <h5 class="text-primary">
-          Current information about the cook
+          Current information about the {% if cook.is_cook %} cook {% else %} user {% endif %}
         </h5>
         {% crispy form %}
       </div>

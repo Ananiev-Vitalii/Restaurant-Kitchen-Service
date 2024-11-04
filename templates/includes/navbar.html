@@ -13,8 +13,8 @@
          class="nav-item nav-link {% if request.resolver_match.url_name == 'about-template' %} active {% endif %}">About</a>
       <a href="{% url 'kitchen_service:menu-list' %}"
          class="nav-item nav-link {% if request.resolver_match.url_name == 'menu-list' %} active {% endif %}">Menu</a>
-      <a href="{% url 'kitchen_service:order-list' %}"
-         class="nav-item nav-link {% if request.resolver_match.url_name == 'order-list' %} active {% endif %}">Orders</a>
+      <a href="{% url 'kitchen_service:orders-list' %}"
+         class="nav-item nav-link {% if request.resolver_match.url_name == 'orders-list' %} active {% endif %}">Orders</a>
 
       {% if user.is_authenticated %}
       <div class="nav-item dropdown">
@@ -24,9 +24,12 @@
         </a>
         <ul class="dropdown-menu dropdown-menu-custom" aria-labelledby="userDropdown">
           {% if user.is_cook %}
-          <li><a class="dropdown-item dropdown-item-custom" href="">Personal Cabinet</a></li>
+          <li>
+            <a class="dropdown-item dropdown-item-custom" href="{% url 'kitchen_service:cook-orders-list' %}">Personal
+              Account</a>
+          </li>
           {% endif %}
-          <li><a class="dropdown-item dropdown-item-custom" href="{% url 'kitchen_service:cook-update' %}">Update
+          <li><a class="dropdown-item dropdown-item-custom" href="{% url 'kitchen_service:account-update' %}">Update
             Profile</a></li>
           <li>
             <a class="dropdown-item dropdown-item-custom" href="#" id="logout-link">Log out</a>

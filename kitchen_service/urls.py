@@ -12,7 +12,9 @@ from .views import (
     OrderCreateView,
     OrderListView,
     CookRegistrationView,
-    CookUpdateView
+    CookUpdateView,
+    CookOrderListView,
+    OrderActionView
 )
 
 app_name = "kitchen_service"
@@ -24,8 +26,10 @@ urlpatterns = [
     path("about/", AboutTemplateView.as_view(), name="about-template"),
     path("menu/", MenuListView.as_view(), name="menu-list"),
     path("order/<int:pk>/create/", OrderCreateView.as_view(), name="order-create"),
-    path("account/update/", CookUpdateView.as_view(), name="cook-update"),
-    path("orders/", OrderListView.as_view(), name="order-list"),
+    path("account/update/", CookUpdateView.as_view(), name="account-update"),
+    path("cook/orders/", CookOrderListView.as_view(), name="cook-orders-list"),
+    path("cook/orders/action/api/", OrderActionView.as_view(), name="order-action"),
+    path("orders/", OrderListView.as_view(), name="orders-list"),
 
     # Registration & Authentication Views
     path("accounts/login/", auth_views.LoginView.as_view(
