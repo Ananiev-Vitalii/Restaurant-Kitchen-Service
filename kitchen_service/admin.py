@@ -1,12 +1,12 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
-from .models import Cook, Ingredient, DishType, Dish, Order
 from django.contrib.auth.admin import UserAdmin
 from django.db.models import QuerySet
 from django.http import HttpRequest
 from django.db.models import ForeignKey, ManyToManyField
 from typing import Optional, List, Tuple, Any
 from django import forms
+from .models import Cook, Ingredient, DishType, Dish, Order
 
 
 @admin.register(Ingredient)
@@ -38,9 +38,16 @@ class CookAdmin(UserAdmin):
 
         if obj and obj.is_cook:
             fieldsets.append(
-                ("Additional info", {
-                    "fields": self.photo_field + self.additional_info_fields + self.social_links_fields
-                }),
+                (
+                    "Additional info",
+                    {
+                        "fields": [
+                            *self.photo_field,
+                            *self.additional_info_fields,
+                            *self.social_links_fields
+                        ]
+                    },
+                )
             )
         else:
             fieldsets.append(
@@ -73,7 +80,9 @@ class DishAdmin(admin.ModelAdmin):
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
     def get_cooks(self, obj: Dish) -> str:
-        return ", ".join([cook.username for cook in obj.cooks.filter(is_cook=True)])
+        return ", ".join([
+            cook.username for cook in obj.cooks.filter(is_cook=True)
+        ])
 
     def get_ingredients(self, obj: Dish) -> str:
         return ", ".join(

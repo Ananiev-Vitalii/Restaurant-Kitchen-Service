@@ -1,13 +1,24 @@
+from typing import Any, Dict, Optional
 from django.views import generic
+from django.db.models.query import QuerySet
 from django.shortcuts import get_object_or_404, render
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.http import HttpResponseRedirect, Http404, HttpRequest, HttpResponse
+from django.http import (
+    HttpResponseRedirect,
+    Http404,
+    HttpRequest,
+    HttpResponse
+)
 from kitchen_service.mixins import CookRequiredMixin
-from kitchen_service.forms import OrderForm, CookRegistrationForm, CookUpdateForm
-from kitchen_service.models import Dish, DishType, Order
+from kitchen_service.forms import (
+    OrderForm,
+    CookRegistrationForm,
+    CookUpdateForm
+)
+from kitchen_service.models import Dish, DishType, Order, Cook
 
 
 class DishListView(generic.ListView):
@@ -41,18 +52,19 @@ class OrderCreateView(generic.CreateView):
     def get_dish(self) -> Dish:
         return get_object_or_404(Dish, pk=self.kwargs.get("pk"))
 
-    def get_form_kwargs(self):
+    def get_form_kwargs(self) -> Dict[str, Any]:
         kwargs = super().get_form_kwargs()
         if self.request.user.is_authenticated:
             kwargs["customer"] = self.request.user
+            kwargs["dish"] = self.get_dish()
         return kwargs
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context["dish"] = self.get_dish()
         return context
 
-    def form_valid(self, form):
+    def form_valid(self, form: OrderForm) -> HttpResponse:
         form.instance.dishes = self.get_dish()
         return super().form_valid(form)
 
@@ -71,41 +83,49 @@ class CookUpdateView(LoginRequiredMixin, generic.UpdateView):
     form_class = CookUpdateForm
     success_url = reverse_lazy("kitchen_service:account-update")
 
-    def get_object(self, queryset=None):
+    def get_object(self, queryset: Optional[QuerySet] = None) -> Cook:
         return self.request.user
 
-    def get_form_kwargs(self):
+    def get_form_kwargs(self) -> Dict[str, Any]:
         kwargs = super().get_form_kwargs()
         kwargs["is_cook"] = self.request.user.is_cook
         return kwargs
 
-    def form_valid(self, form):
-        messages.success(self.request, "Your profile has been updated successfully.")
+    def form_valid(self, form: CookUpdateForm) -> HttpResponse:
+        messages.success(
+            self.request, "Your profile has been updated successfully."
+        )
         return super().form_valid(form)
 
 
-class CookOrderListView(LoginRequiredMixin, CookRequiredMixin, generic.ListView):
+class CookOrderListView(
+    LoginRequiredMixin, CookRequiredMixin, generic.ListView
+):
     model = Order
     template_name = "kitchen_service/cook_order_list.html"
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Order]:
         return Order.objects.filter(cook=self.request.user)
 
 
 class OrderActionView(LoginRequiredMixin, generic.View):
-    def get(self, request, *args, **kwargs):
+    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         raise Http404("Page not found")
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         order_id = request.POST.get("order_id")
         action = request.POST.get("action")
 
         if order_id and action:
-            order = get_object_or_404(Order, pk=order_id, cook=self.request.user)
+            order = get_object_or_404(
+                Order, pk=order_id, cook=self.request.user
+            )
             if action in ["complete", "cancel"]:
                 order.delete()
 
-        return HttpResponseRedirect(reverse_lazy("kitchen_service:cook-orders-list"))
+        return HttpResponseRedirect(
+            reverse_lazy("kitchen_service:cook-orders-list")
+        )
 
 
 class CookRegistrationView(generic.CreateView):
