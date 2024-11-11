@@ -1,17 +1,16 @@
 import os
 from pathlib import Path
-from decouple import config
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 SECRET_KEY = os.environ.get(
     "DJANGO_SECRET_KEY",
     "django-insecure-ft+ng&7*5lerc85pgww4mbpcr@-@5wv3bb++tr=""ptkl1vn653e"
 )
 
-DEBUG = os.environ.get("DJANGO_DEBUG", "") != "False"
+DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1"]
+ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "debug_toolbar",
@@ -58,13 +57,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "restaurant.wsgi.application"
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -121,7 +113,7 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = config("EMAIL_HOST_USER")  # Your email address
-EMAIL_HOST_PASSWORD = config(
+EMAIL_HOST_USER = os.environ["EMAIL_HOST_USER"]  # Your email address
+EMAIL_HOST_PASSWORD = os.environ[
     "EMAIL_HOST_PASSWORD"
-)  # App-specific email password
+]  # App-specific email password
