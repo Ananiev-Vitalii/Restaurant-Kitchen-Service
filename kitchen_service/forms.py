@@ -29,11 +29,12 @@ class OrderForm(forms.ModelForm):
             self.fields["customer_name"].initial = customer.first_name
             self.fields["customer_name"].disabled = True
         if dish:
-            self.fields["cook"].queryset = dish.cooks.all()
-        else:
-            self.fields["cook"].queryset = get_user_model().objects.filter(
-                is_cook=True
-            )
+            cooks = dish.cooks.filter(is_cook=True)
+            if cooks.exists():
+                self.fields["cook"].queryset = cooks
+            else:
+                self.fields["cook"].queryset = get_user_model().objects.filter(is_cook=True)
+
         self.fields["cook"].empty_label = None
         self.helper = FormHelper()
         self.helper.form_method = "post"
