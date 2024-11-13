@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}
+Personal Account/{{ cook.username}}/Kitchen Service
+{% endblock title %}
+
+{% block content %}
+
+<!-- Spinner Start -->
+{% include 'includes/spinner.html' %}
+<!-- Spinner End -->
+
+<!-- Navbar & Hero Start -->
+<div class="container-xxl position-relative p-0">
+  {% include 'includes/navbar.html' %}
+  <div class="container-xxl py-5 bg-dark hero-header mb-5">
+    <div class="container text-center my-5 pt-5 pb-4">
+      <h1 class="display-3 text-white mb-3 animated slideInDown">{{user.first_name}}'s Order Management</h1>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb justify-content-center text-uppercase">
+          <li class="breadcrumb-item">
+            <a href="{% url 'kitchen_service:account-update' %}">Update Profile</a>
+          </li>
+          <li class="breadcrumb-item text-white active" aria-current="page">Personal Account</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+</div>
+<!-- Navbar & Hero End -->
+
+<!-- Orders Update Start -->
+<div class="container-xxl py-5">
+  <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+    <h2 class="section-title ff-secondary text-primary fw-normal">Current Orders</h2>
+  </div>
+</div>
+<div class="container mt-4 wow fadeInUp" data-wow-delay="0.2s">
+  <div class="row">
+    {% for order in order_list %}
+    <div class="col-md-6 mb-4">
+      <div class="card h-100">
+        <div class="card-header">
+          <strong>Order №{{ order.id }}</strong>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">{{ order.customer_name }}</h5>
+          <p class="card-text">
+            <strong>Dish:</strong> {{ order.dishes }}<br>
+            <strong>Quantity:</strong> {{ order.quantity }}
+          </p>
+        </div>
+        <div class="card-footer text-right">
+          <form method="post" action="{% url 'kitchen_service:order-action' %}" class="d-inline">
+            {% csrf_token %}
+            <input type="hidden" name="order_id" value="{{ order.id }}">
+            <button type="submit" name="action" value="complete" class="btn btn-success btn-sm">
+              <i class="fas fa-check"></i> Complete
+            </button>
+          </form>
+          <form method="post" action="{% url 'kitchen_service:order-action' %}" class="d-inline">
+            {% csrf_token %}
+            <input type="hidden" name="order_id" value="{{ order.id }}">
+            <button type="submit" name="action" value="cancel" class="btn btn-danger btn-sm">
+              <i class="fas fa-times"></i> Cancel
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+      <p class="text-center">No orders found.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Orders Update End -->
+
+<!-- Footer Start -->
+{% include 'includes/footer.html' %}
+<!-- Footer End -->
+
+<!-- Back to Top -->
+{% include 'includes/back_to_top.html' %}
+<!-- Back to Top End-->
+
+{% endblock content %}

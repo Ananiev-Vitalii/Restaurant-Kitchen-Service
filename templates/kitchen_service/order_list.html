@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Orders / Kitchen Service
+{% endblock title %}
+
+{% block content %}
+
+<!-- Spinner Start -->
+{% include 'includes/spinner.html' %}
+<!-- Spinner End -->
+
+<!-- Navbar & Hero Start -->
+<div class="container-xxl position-relative p-0">
+  {% include 'includes/navbar.html' %}
+
+  <div class="container-xxl py-5 bg-dark hero-header mb-5">
+    <div class="container text-center my-5 pt-5 pb-4">
+      <h1 class="display-3 text-white mb-3 animated slideInDown">All Orders</h1>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb justify-content-center text-uppercase">
+          <li class="breadcrumb-item"><a href="{% url 'kitchen_service:menu-list' %}">Menu</a></li>
+          <li class="breadcrumb-item"><a href="#contact">Contact</a></li>
+          <li class="breadcrumb-item text-white active" aria-current="page">Orders</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+</div>
+<!-- Navbar & Hero End -->
+
+<!-- Orders Start -->
+<div class="container mt-5" style="padding-top: 40px;">
+  <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+    <h5 class="section-title ff-secondary text-center text-primary fw-normal">List of all orders</h5>
+  </div>
+  <div class="table-responsive" style="padding-top: 40px;">
+    <table class="table table-striped table-hover align-middle">
+      <thead class="table-dark">
+      <tr>
+        <th scope="col">Customer Name</th>
+        <th scope="col">Order Number</th>
+        <th scope="col">Dish</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Total Price</th>
+        <th scope="col">Cook</th>
+        <th scope="col">Order Date</th>
+        <th scope="col">Status</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for order in order_list %}
+      <tr>
+        <td>{{ order.customer_name }}</td>
+        <td>{{ order.order_number }}</td>
+        <td>
+          <div class="d-flex align-items-center">
+            <img src="{{ order.dishes.image.url }}" alt="{{ order.dishes.name }}" class="img-thumbnail me-2"
+                 style="width: 50px; height: 50px; object-fit: cover;">
+            <span>{{ order.dishes.name }}</span>
+          </div>
+        </td>
+        <td>{{ order.quantity }}</td>
+        <td>${{ order.total_price }}</td>
+        <td>
+          <div class="d-flex align-items-center">
+            <img src="{{ order.cook.photo.url }}" alt="{{ order.cook.first_name }}" class="rounded-circle me-2"
+                 style="width: 40px; height: 40px; object-fit: cover;">
+            <span>{{ order.cook.first_name }}. {{ order.cook.last_name|slice:":1" }}.</span>
+          </div>
+        </td>
+        <td>{{ order.order_date|date:"Y-m-d H:i" }}</td>
+        <td>
+          <span class="badge bg-warning text-dark">Pending</span>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="8" class="text-center">No orders found.</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<!-- Orders End -->
+
+<!-- Footer Start -->
+{% include 'includes/footer.html' %}
+<!-- Footer End -->
+
+<!-- Back to Top -->
+{% include 'includes/back_to_top.html' %}
+<!-- Back to Top End-->
+
+{% endblock %}

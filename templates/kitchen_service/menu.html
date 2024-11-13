@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Menu / Kitchen Service
+{% endblock title %}
+
+{% block content %}
+
+<!-- Spinner Start -->
+{% include 'includes/spinner.html' %}
+<!-- Spinner End -->
+
+<!-- Navbar & Hero Start -->
+<div class="container-xxl position-relative p-0">
+  {% include 'includes/navbar.html' %}
+
+  <div class="container-xxl py-5 bg-dark hero-header mb-5">
+    <div class="container text-center my-5 pt-5 pb-4">
+      <h1 class="display-3 text-white mb-3 animated slideInDown">Food Menu</h1>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb justify-content-center text-uppercase">
+          <li class="breadcrumb-item"><a href="{% url 'kitchen_service:index' %}">Home</a></li>
+          <li class="breadcrumb-item"><a href="#contact">Contact</a></li>
+          <li class="breadcrumb-item text-white active" aria-current="page">Menu</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+</div>
+<!-- Navbar & Hero End -->
+
+<!-- Menu Start -->
+<div class="container-xxl py-5">
+  <div class="container">
+    <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+      <h5 class="section-title ff-secondary text-center text-primary fw-normal">Food Menu</h5>
+      <h1 class="mb-5">Types of Dishes</h1>
+    </div>
+    <div class="tab-class text-center wow fadeInUp" data-wow-delay="0.1s">
+      <ul class="nav nav-pills d-inline-flex justify-content-center border-bottom mb-5">
+        {% for dish_type in dish_type_list %}
+        <li class="nav-item">
+          <a class="d-flex align-items-center text-start mx-3 ms-0 pb-3 {% if forloop.first %}active{% endif %}"
+             data-bs-toggle="pill" href="#tab-{{ dish_type.id }}">
+            <div>
+              <h5 class="mt-n1 mb-0">
+                {{ dish_type.name }}{% if not forloop.last %} <span style="color: orange;">/</span>{% endif %}
+              </h5>
+            </div>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+      <div class="tab-content">
+        {% for dish_type in dish_type_list %}
+        <div id="tab-{{ dish_type.id }}"
+             class="tab-pane fade {% if forloop.first %}show active{% endif %} p-0">
+          <div class="row g-4">
+            {% for dish in dish_type.dish_set.all %}
+            <div class="col-lg-12 d-flex align-items-stretch">
+              <div class="w-100 d-flex flex-column justify-content-between"
+                   style="padding: 20px; margin-bottom: 20px; min-height: 300px; position: relative;">
+                <div class="d-flex">
+                  <img class="flex-shrink-0 img-fluid rounded" src="{{ dish.image.url }}" alt="{{ dish.name }}"
+                       style="width: 200px; height: 200px; object-fit: cover;">
+                  <div class="w-100 d-flex flex-column text-start ps-3">
+                    <h5 class="d-flex justify-content-between border-bottom pb-2">
+                      <span>{{ dish.name }}</span>
+                      <span class="text-primary">{{ dish.price }}$</span>
+                    </h5>
+                    <small class="fst-italic">{{ dish.description }}</small>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-end" style="margin-top: 10px;">
+                  <a class="btn btn-primary btn-sm" href="{{ dish.get_absolute_url }}"
+                     style="text-transform: none; font-size: 12px;">
+                    Order a dish
+                  </a>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Menu End -->
+
+<!-- Footer Start -->
+{% include 'includes/footer.html' %}
+<!-- Footer End -->
+
+<!-- Back to Top -->
+{% include 'includes/back_to_top.html' %}
+<!-- Back to Top End-->
+
+{% endblock content %}

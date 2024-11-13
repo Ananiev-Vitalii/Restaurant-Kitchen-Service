@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+About / Kitchen Service
+{% endblock title %}
+
+{% block content %}
+
+<!-- Spinner Start -->
+{% include 'includes/spinner.html' %}
+<!-- Spinner End -->
+
+<!-- Navbar & Hero Start -->
+<div class="container-xxl position-relative p-0">
+  {% include 'includes/navbar.html' %}
+  <div class="container-xxl py-5 bg-dark hero-header mb-5">
+    <div class="container text-center my-5 pt-5 pb-4">
+      <h1 class="display-3 text-white mb-3 animated slideInDown">About Us</h1>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb justify-content-center text-uppercase">
+          <li class="breadcrumb-item"><a href="#team">Team</a></li>
+          <li class="breadcrumb-item"><a href="#contact">Contact</a></li>
+          <li class="breadcrumb-item text-white active" aria-current="page">About</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+</div>
+<!-- Navbar & Hero End -->
+
+<!-- About Start -->
+{% include 'includes/about_us.html' %}
+<!-- About End -->
+
+<!-- Awards Start -->
+{% if request.resolver_match.url_name == 'about-template'%}
+<div class="container-xxl py-5">
+  <div class="container">
+    <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+      <h5 class="section-title ff-secondary text-center text-primary fw-normal">Our Achievements</h5>
+      <h1 class="mb-5">Awards & Recognitions</h1>
+    </div>
+    <div class="row">
+      <div class="col-lg-3 col-md-6">
+        <div class="award-card">
+          <img style="width: 100%; height: 280px; object-fit: cover;" src="{% static 'img/best-restaurant-2021.jpg' %}"
+               alt="Award Image" class="img-fluid mb-3">
+          <h5 class="award-title">Best Restaurant 2021</h5>
+          <p class="award-description">Received for outstanding performance and quality service in the city.</p>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="award-card">
+          <img style="width: 100%; height: 280px; object-fit: cover;" src="{% static 'img/culinary-excellence.jpg' %}"
+               alt="Award Image" class="img-fluid mb-3">
+          <h5 class="award-title">Culinary Excellence</h5>
+          <p class="award-description">Awarded for innovative dishes and exceptional culinary skills.</p>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="award-card">
+          <img style="width: 100%; height: 280px; object-fit: cover;" src="{% static 'img/customer-choice-award.jpg' %}"
+               alt="Award Image" class="img-fluid mb-3">
+          <h5 class="award-title">Customer Choice Award</h5>
+          <p class="award-description">Chosen by customers for best dining experience in 2022.</p>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="award-card">
+          <img style="width: 100%; height: 280px; object-fit: cover;" src="{% static 'img/top-rated-service.jpg' %}"
+               alt="Award Image" class="img-fluid mb-3">
+          <h5 class="award-title">Top Rated Service</h5>
+          <p class="award-description">The highest rating for quality of service among all local restaurants.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+<!-- Awards End -->
+
+<!-- Team Start -->
+{% include 'includes/team.html' %}
+<!-- Team End -->
+
+<!-- Footer Start -->
+{% include 'includes/footer.html' %}
+<!-- Footer End -->
+
+<!-- Back to Top -->
+{% include 'includes/back_to_top.html' %}
+<!-- Back to Top End-->
+
+{% endblock content %}
+
+{% block JavaScript %}
+<!-- This script loops the 'video-introduction' video back to the start when it reaches 26 seconds -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      var videoIntroduction = document.getElementById('video-introduction');
+      videoIntroduction.addEventListener('timeupdate', function() {
+          if (videoIntroduction.currentTime >= 26) {
+              videoIntroduction.currentTime = 0;
+              videoIntroduction.play();
+          }
+      });
+  });
+</script>
+
+<!-- This script loads all cooks when the 'View More' button is clicked -->
+<script>
+  document.getElementById('load-more').addEventListener('click', function() {
+    var xhr = new XMLHttpRequest();
+    var url = window.location.pathname + '?show_all_cooks=1';
+    xhr.open('GET', url, true);
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(xhr.responseText, 'text/html');
+        var newCooksContainer = doc.getElementById('cooks-container');
+        document.getElementById('cooks-container').innerHTML = newCooksContainer.innerHTML;
+        document.getElementById('load-more').style.display = 'none';
+      }
+    };
+    xhr.send();
+  });
+</script>
+{% endblock JavaScript %}
