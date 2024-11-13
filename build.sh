@@ -10,10 +10,3 @@ python manage.py collectstatic --no-input
 
 # Apply any outstanding database migrations
 python manage.py migrate
-
-# Loading fixture with data
-python manage.py loaddata kitchen_service/fixtures/cooks.json
-python manage.py loaddata kitchen_service/fixtures/ingredients.json
-python manage.py loaddata kitchen_service/fixtures/dishtypes.json
-python manage.py loaddata kitchen_service/fixtures/dishes.json
-python manage.py loaddata kitchen_service/fixtures/orders.json
