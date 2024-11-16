@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "captcha",
 ]
 
 MIDDLEWARE = [
@@ -118,3 +119,6 @@ EMAIL_HOST_USER = os.environ["EMAIL_HOST_USER"]  # Your email address
 EMAIL_HOST_PASSWORD = os.environ[
     "EMAIL_HOST_PASSWORD"
 ]  # App-specific email password
+
+CAPTCHA_FONT_SIZE = 100
+CAPTCHA_LENGTH = 6

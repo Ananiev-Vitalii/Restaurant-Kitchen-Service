@@ -1,5 +1,6 @@
 from typing import Optional
 from django import forms
+from captcha.fields import CaptchaField
 from django.contrib.auth import get_user_model
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, ButtonHolder, Submit, HTML
@@ -91,6 +92,8 @@ class CookUpdateForm(forms.ModelForm):
 
 
 class CookAuthenticationForm(AuthenticationForm):
+    captcha = CaptchaField()
+
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -101,22 +104,33 @@ class CookAuthenticationForm(AuthenticationForm):
         self.helper.form_show_errors = False
 
         for field_name, field in self.fields.items():
-            field.widget.attrs.update(
-                {"class": "form-control", "placeholder": f"{field.label}"}
-            )
+            if field_name != "captcha":
+                field.widget.attrs.update({
+                    "class": "form-control",
+                    "placeholder": f"{field.label}"})
+            else:
+                field.widget.attrs.update({
+                    "placeholder": "Enter text with pictures"
+                })
 
         self.helper.layout = Layout(
             HTML(
                 """
-                {% if form.errors %}
+                {% if form.non_field_errors %}
                     <p class="error-message">
                         Invalid username or password. Please try again.
+                    </p>
+                {% endif %}
+                {% if form.captcha.errors %}
+                    <p class="error-message">
+                        Invalid CAPTCHA. Please try again.
                     </p>
                 {% endif %}
                 """
             ),
             Field("username"),
             Field("password"),
+            Field("captcha"),
             Submit(
                 "submit",
                 "Log in",
@@ -187,11 +201,14 @@ class CustomSetPasswordForm(SetPasswordForm):
 
 
 class CookRegistrationForm(UserCreationForm):
+    captcha = CaptchaField()
+
     class Meta:
         model = get_user_model()
         fields = [
             "username", "email", "first_name",
-            "last_name", "password1", "password2"
+            "last_name", "password1", "password2",
+            "captcha"
         ]
 
     def __init__(self, *args, **kwargs) -> None:
@@ -206,11 +223,16 @@ class CookRegistrationForm(UserCreationForm):
         self.fields["password2"].help_text = ""
 
         for field_name, field in self.fields.items():
-            field.widget.attrs.update({
-                "class": "form-control",
-                "required": "required",
-                "placeholder": f"{field.label}"
-            })
+            if field_name != 'captcha':
+                field.widget.attrs.update({
+                    "class": "form-control",
+                    "placeholder": f"{field.label}",
+                    "required": "required",
+                })
+            else:
+                field.widget.attrs.update({
+                    "placeholder": "Enter text with pictures"
+                })
 
         self.helper.layout = Layout(
             Field("username"),
@@ -218,7 +240,8 @@ class CookRegistrationForm(UserCreationForm):
             Field("first_name"),
             Field("last_name"),
             Field("password1"),
-            Field("password2", ),
+            Field("password2"),
+            Field("captcha"),
             Submit(
                 "submit",
                 "Register",
