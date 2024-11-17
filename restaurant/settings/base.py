@@ -123,3 +123,4 @@ EMAIL_HOST_PASSWORD = os.environ[
 CAPTCHA_FONT_SIZE = 100
 CAPTCHA_LENGTH = 6
 CAPTCHA_IMAGE_BEHAVIOR = "base64"  # Saving images in HTML
+CAPTCHA_FONT_PATH = os.path.join(BASE_DIR, "static", "fonts", "DejaVuSans.ttf")
