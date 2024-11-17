@@ -9,7 +9,7 @@ register = template.Library()
 def popular_breakfasts() -> QuerySet[Dish]:
     breakfasts = Dish.objects.filter(
         is_popular=True, meal_time="BF"
-    ).prefetch_related("cooks", "ingredients")
+    )
     return breakfasts
 
 
@@ -17,7 +17,7 @@ def popular_breakfasts() -> QuerySet[Dish]:
 def popular_lunches() -> QuerySet[Dish]:
     lunch = Dish.objects.filter(
         is_popular=True, meal_time="LN"
-    ).prefetch_related("cooks", "ingredients")
+    )
     return lunch
 
 
@@ -25,5 +25,5 @@ def popular_lunches() -> QuerySet[Dish]:
 def popular_dinners() -> QuerySet[Dish]:
     dinners = Dish.objects.filter(
         is_popular=True, meal_time="DN"
-    ).prefetch_related("cooks", "ingredients")
+    )
     return dinners
