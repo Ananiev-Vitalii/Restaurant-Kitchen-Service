@@ -122,4 +122,9 @@ EMAIL_HOST_PASSWORD = os.environ[
 
 CAPTCHA_FONT_SIZE = 100
 CAPTCHA_LENGTH = 6
-CAPTCHA_IMAGE_BEHAVIOR = "base64"  # Saving images in HTML
+CAPTCHA_IMAGE_BEHAVIOR = "base64"
+CAPTCHA_FONT_PATH = os.path.join(BASE_DIR, "static", "fonts", "DejaVuSans.ttf")
+CAPTCHA_NOISE_FUNCTIONS = ("captcha.helpers.noise_arcs", "captcha.helpers.noise_dots")
+CAPTCHA_BACKGROUND_COLOR = "#ffffff"
+CAPTCHA_FOREGROUND_COLOR = "#000000"
+CAPTCHA_CHALLENGE_FUNCT = "captcha.helpers.random_char_challenge"
