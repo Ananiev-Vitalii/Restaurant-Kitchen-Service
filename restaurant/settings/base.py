@@ -1,5 +1,9 @@
+import environ
 import os
 from pathlib import Path
+
+env = environ.Env()
+environ.Env.read_env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -14,6 +18,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "debug_toolbar",
+    "storages",
     "django_cleanup.apps.CleanupConfig",
     "crispy_forms",
     "crispy_bootstrap5",
@@ -87,6 +92,8 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 AUTH_USER_MODEL = "kitchen_service.Cook"
 
