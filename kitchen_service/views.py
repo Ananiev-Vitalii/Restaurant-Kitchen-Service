@@ -41,7 +41,7 @@ class MenuListView(generic.ListView):
     model = DishType
     template_name = "kitchen_service/menu.html"
     context_object_name = "dish_type_list"
-    queryset = DishType.objects.all()
+    queryset = DishType.objects.prefetch_related("dish_set")
 
 
 class OrderCreateView(generic.CreateView):
@@ -49,14 +49,19 @@ class OrderCreateView(generic.CreateView):
     template_name = "kitchen_service/order_form.html"
     success_url = reverse_lazy("kitchen_service:menu-list")
 
+    _cached_dish = None
+
     def get_dish(self) -> Dish:
-        return get_object_or_404(Dish, pk=self.kwargs.get("pk"))
+        if not self._cached_dish:
+            self._cached_dish = get_object_or_404(
+                Dish, pk=self.kwargs.get("pk"))
+        return self._cached_dish
 
     def get_form_kwargs(self) -> Dict[str, Any]:
         kwargs = super().get_form_kwargs()
+        kwargs["dish"] = self.get_dish()
         if self.request.user.is_authenticated:
             kwargs["customer"] = self.request.user
-            kwargs["dish"] = self.get_dish()
         return kwargs
 
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
@@ -73,8 +78,6 @@ class OrderListView(generic.ListView):
     model = Order
     queryset = Order.objects.all().select_related(
         "cook", "dishes__dish_type"
-    ).prefetch_related(
-        "dishes__ingredients", "dishes__cooks"
     )
 
 

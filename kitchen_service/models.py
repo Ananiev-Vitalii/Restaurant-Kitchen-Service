@@ -43,7 +43,7 @@ class Cook(AbstractUser):
     facebook_link = models.URLField(default="https://www.facebook.com/")
     instagram_link = models.URLField(default="https://www.instagram.com/")
     twitter_link = models.URLField(default="https://www.twitter.com/")
-    is_cook = models.BooleanField(default=False)
+    is_cook = models.BooleanField(default=False, db_index=True)
 
     def save(self, *args, **kwargs) -> None:
         self.first_name = self._custom_capitalize(str(self.first_name))
@@ -83,15 +83,16 @@ class Dish(models.Model):
     description = models.TextField()
     price = models.DecimalField(max_digits=8, decimal_places=2,
                                 validators=[MinValueValidator(0.01)])
-    dish_type = models.ForeignKey(DishType, on_delete=models.CASCADE)
+    dish_type = models.ForeignKey(
+        DishType, on_delete=models.CASCADE, db_index=True)
     cooks = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, related_name="cooked_dishes")
+        settings.AUTH_USER_MODEL, related_name="cooked_dishes", db_index=True)
     ingredients = models.ManyToManyField(
-        Ingredient, related_name="used_in_dishes")
+        Ingredient, related_name="used_in_dishes", db_index=True)
     is_popular = models.BooleanField(default=False, db_index=True)
     meal_time = models.CharField(
-        max_length=2, choices=MEAL_TIMES, default="LN"
-    )
+        max_length=2, choices=MEAL_TIMES, default="LN",
+        db_index=True)
     image = models.ImageField(
         upload_to="dishes/", default="dishes/default.jpg"
     )
@@ -124,14 +125,15 @@ class Order(models.Model):
     dishes = models.ForeignKey(
         Dish, on_delete=models.CASCADE, related_name="orders"
     )
-    quantity = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)])
+    quantity = models.PositiveIntegerField(
+        default=1, validators=[MinValueValidator(1)])
     total_price = models.DecimalField(
         max_digits=8, decimal_places=2, editable=False
     )
     status = models.CharField(
         max_length=1, choices=STATUS_CHOICES, default="P")
     cook = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True,
     )
 
     class Meta:

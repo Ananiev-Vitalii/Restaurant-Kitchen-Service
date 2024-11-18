@@ -22,20 +22,16 @@ class OrderForm(forms.ModelForm):
         }
 
     def __init__(
-            self, *args, dish: Optional[Dish] = None, customer: Optional[get_user_model] = None,
+            self, *args, dish: Optional[Dish] = None,
+            customer: Optional[get_user_model] = None,
             **kwargs
     ) -> None:
         super().__init__(*args, **kwargs)
         if customer:
             self.fields["customer_name"].initial = customer.first_name
             self.fields["customer_name"].disabled = True
-        if dish:
-            cooks = dish.cooks.filter(is_cook=True)
-            if cooks.exists():
-                self.fields["cook"].queryset = cooks
-            else:
-                self.fields["cook"].queryset = get_user_model().objects.filter(is_cook=True)
 
+        self.fields["cook"].queryset = dish.cooks.all()
         self.fields["cook"].empty_label = None
         self.helper = FormHelper()
         self.helper.form_method = "post"
@@ -223,7 +219,7 @@ class CookRegistrationForm(UserCreationForm):
         self.fields["password2"].help_text = ""
 
         for field_name, field in self.fields.items():
-            if field_name != 'captcha':
+            if field_name != "captcha":
                 field.widget.attrs.update({
                     "class": "form-control",
                     "placeholder": f"{field.label}",

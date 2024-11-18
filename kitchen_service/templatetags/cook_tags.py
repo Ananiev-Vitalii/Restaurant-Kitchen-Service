@@ -10,7 +10,7 @@ register = template.Library()
 
 @register.simple_tag
 def total_cooks_count() -> int:
-    return get_user_model().objects.filter(is_cook=True).count()
+    return User.objects.filter(is_cook=True).count()
 
 
 @register.simple_tag(takes_context=True)
@@ -19,9 +19,9 @@ def all_cooks(
 ) -> QuerySet[Cook]:
     request = context["request"]
     show_all = request.GET.get("show_all_cooks")
-    cooks = get_user_model().objects.filter(
+    cooks = User.objects.filter(
         is_cook=True
-    ).prefetch_related("cooked_dishes")
+    )
     if show_all:
         return cooks
     if limit is not None:
