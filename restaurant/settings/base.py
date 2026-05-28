@@ -18,7 +18,6 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "debug_toolbar",
-    "storages",
     "django_cleanup.apps.CleanupConfig",
     "crispy_forms",
     "crispy_bootstrap5",
