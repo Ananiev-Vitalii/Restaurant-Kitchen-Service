@@ -153,6 +153,17 @@ track order status, and assign chefs.
       at [http://127.0.0.1:8000/cook/orders/](http://127.0.0.1:8000/cook/orders/). Additionally, the history of all
       orders created by clients can be viewed at [http://127.0.0.1:8000/orders/](http://127.0.0.1:8000/orders/).
 
+## Site Link
+The project is available at the following address:
+[https://restaurant-kitchen-service-g7sl.onrender.com](https://restaurant-kitchen-service-g7sl.onrender.com)
+
+## Test User Data
+To test the application functionality, you can use the following test account:
+
+### User Credentials
+- **Username:** Cook2
+- **Password:** Test12345678
+
 ## Contact
 
 - **Developer:** Vitalii Ananiev
