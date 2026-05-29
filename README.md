@@ -1,5 +1,16 @@
 ﻿# Restaurant Kitchen Service
 
+A Django-based web application for managing restaurant kitchen orders, cooks, and order statuses.
+
+## Live Demo
+
+🔗 [View Deployed Application](https://restaurant-kitchen-service-g7sl.onrender.com)
+
+### Test Account
+
+- **Username:** `Cook2`
+- **Password:** `Test12345678`
+
 ## Project Description
 
 Restaurant Kitchen Service is a web application developed using Django to manage orders and cooks in a restaurant
@@ -32,7 +43,7 @@ track order status, and assign chefs.
 
 - **Programming Language:** Python 3.12.2
 - **Framework:** Django 5.1
-- **Database:** SQLite (default for development), can be switched to PostgreSQL or other DBMS for production
+- **Database:** SQLite(default for base), PostgreSQL(default for development and production)
 - **Frontend:** HTML5, CSS3, JavaScript, Bootstrap
 - **Additional Libraries:** Django Crispy Forms and Crispy Bootstrap5 for enhanced form styling
 
@@ -95,8 +106,6 @@ track order status, and assign chefs.
     ```env
     DJANGO_SECRET_KEY=your_secret_key
     DJANGO_SETTINGS_MODULE=restaurant.settings.dev
-    DEBUG=False
-    ALLOWED_HOSTS=127.0.0.1,localhost
 
     # Database (only required if using PostgreSQL)
     POSTGRES_DB=your_db_name
@@ -104,6 +113,14 @@ track order status, and assign chefs.
     POSTGRES_USER=your_db_user
     POSTGRES_PASSWORD=your_db_password
     POSTGRES_HOST=your_db_host
+   
+    # media / cloudinary for development or production 
+    CLOUDINARY_CLOUD_NAME=your_cloud_name
+    CLOUDINARY_API_KEY=your_api_key
+    CLOUDINARY_API_SECRET=your_api_secret
+
+    # domain for production (optional)
+    RENDER_EXTERNAL_HOSTNAME=<domain>
     ```
 
    **Note:** Please ensure that in production mode, if you are using a PostgreSQL database, you have added the necessary
@@ -153,17 +170,7 @@ track order status, and assign chefs.
       at [http://127.0.0.1:8000/cook/orders/](http://127.0.0.1:8000/cook/orders/). Additionally, the history of all
       orders created by clients can be viewed at [http://127.0.0.1:8000/orders/](http://127.0.0.1:8000/orders/).
 
-## Site Link
-The project is available at the following address:
-[https://restaurant-kitchen-service-g7sl.onrender.com](https://restaurant-kitchen-service-g7sl.onrender.com)
-
-## Test User Data
-To test the application functionality, you can use the following test account:
-
-### User Credentials
-- **Username:** Cook2
-- **Password:** Test12345678
-
+      
 ## Contact
 
 - **Developer:** Vitalii Ananiev
